@@ -1,5 +1,13 @@
 <script src="/socket.io/socket.io.js" ></script>
 
+<div id="combo">
+    COMBO
+    <br>
+    <span id="count"></span>x<span id="emoji"></span>
+    <br>
+    (Max: <span id="max"></span>)
+</div>
+
 <script>
  const EMOJIS = {
      "duck": "🦆",
@@ -27,18 +35,64 @@
      node.classList.add("animar");
      document.body.appendChild(node);
  }
+
+ let count = 0;
+
+ let lastEmoji = null;
+ let lastEmojiCombo = 0;
+ let highScore = 0;
+ let highScoreEmoji = null;
  
  const socket = io();
  socket.connect();
  socket.emit("hello");
  socket.emit("server");
+ let comboCount = document.getElementById("count");
+ let combo = document.getElementById("combo");
+ let emojiSpan = document.getElementById("emoji");
+ let max = document.getElementById("max");
+
+ let debounce = null;
+ 
  socket.on("emoji", (emoji) => {
-     // console.log("Te han mandado un emoji", emoji);
+     if (count > 500 || !EMOJIS[emoji]) {
+	 return;
+     }
      pintarEmoji(emoji);
+     count++;
+
+     clearTimeout(debounce);
+     debounce = setTimeout(() => {
+	 lastEmoji = null;
+	 lastEmojiCombo = 0;
+	 combo.classList.remove("show");
+     }, 5000);
+
+     if (lastEmoji === emoji) {
+	 lastEmojiCombo++;
+     } else {
+	 lastEmoji = emoji;
+	 lastEmojiCombo = 1;
+     }
+
+     if (lastEmojiCombo > highScore) {
+	 highScore = lastEmojiCombo;
+	 highScoreEmoji = EMOJIS[emoji];
+	 max.innerText = highScoreEmoji + " " + highScore;
+     }
+
+     if (lastEmojiCombo >= 2) {
+	 comboCount.innerText = lastEmojiCombo;
+	 emojiSpan.innerText = EMOJIS[emoji];
+	 combo.classList.add("show");
+     } else {
+	 combo.classList.remove("show");
+     }
  });
 
  document.addEventListener("animationend", (e) => {
      e.target.remove();
+     count--;
  });
 </script>
 
@@ -62,4 +116,39 @@
      animation: chorro 5s linear;
      animation-fill-mode: forwards;
  }
+
+ 
+ /* Inline #1 | http://localhost:3000/server.html */
+
+ #combo {
+     font-family: sans-serif;
+     font-szie: ;
+     font-size: 1.5rem;
+     font-weight: bold;
+     text-styl: ;
+     font-style: italic;
+ }
+
+ #count {
+     font-size: 3rem;
+ }
+
+ #combo {
+     display: none;
+ }
+
+ .show {
+     display: block !important;
+ }
+
+ #combo {
+     position: absolute;
+     bottom: 10px;
+     left: 10px;
+     color: white;
+     text-decoration: ;
+     text-shadow: 0 0 4px black;
+     z-index: 99;
+ }
+
 </style>
