@@ -12,19 +12,10 @@ server.register(fastifyStatic, {
 
 server.ready().then(() => {
   server.io.on("connection", (socket) => {
-    console.log("HOLA");
-    socket.on("hello", () => {
-      console.log("Nos dice hola");
-    });
-    socket.on("client", () => {
-      console.log("se identifica como cliente");
-    });
     socket.on("server", () => {
-      console.log("se identifica como servidor");
       socket.join("obs");
     });
     socket.on("emoji", (emoji) => {
-      console.log("emoji: ", emoji);
       socket.to("obs").emit("emoji", emoji);
     });
   });
