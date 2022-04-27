@@ -21,7 +21,9 @@
      const node = document.createElement("div");
      node.innerText = realEmoji;
      const value = Math.random() * 100;
+     const top = Math.random() * 20 + 75;
      node.style.left = value + "%";
+     node.style.top = top + "%";
      node.classList.add("animar");
      document.body.appendChild(node);
  }
