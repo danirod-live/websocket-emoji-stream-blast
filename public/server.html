@@ -1,6 +1,6 @@
 <script src="/socket.io/socket.io.js" ></script>
 
-<div id="combo">
+<div id="combo" class="hide">
     COMBO
     <br>
     <span id="count"></span>x<span id="emoji"></span>
@@ -65,7 +65,7 @@
      debounce = setTimeout(() => {
 	 lastEmoji = null;
 	 lastEmojiCombo = 0;
-	 combo.classList.remove("show");
+	 combo.classList.add("hide");
      }, 5000);
 
      if (lastEmoji === emoji) {
@@ -84,9 +84,9 @@
      if (lastEmojiCombo >= 2) {
 	 comboCount.innerText = lastEmojiCombo;
 	 emojiSpan.innerText = EMOJIS[emoji];
-	 combo.classList.add("show");
+	 combo.classList.remove("hide");
      } else {
-	 combo.classList.remove("show");
+	 combo.classList.add("hide");
      }
  });
 
@@ -122,10 +122,8 @@
 
  #combo {
      font-family: sans-serif;
-     font-szie: ;
      font-size: 1.5rem;
      font-weight: bold;
-     text-styl: ;
      font-style: italic;
  }
 
@@ -133,12 +131,9 @@
      font-size: 3rem;
  }
 
- #combo {
-     display: none;
- }
-
- .show {
-     display: block !important;
+ .hide {
+     opacity: 0;
+     transition: opacity 1s linear;
  }
 
  #combo {
@@ -146,7 +141,6 @@
      bottom: 10px;
      left: 10px;
      color: white;
-     text-decoration: ;
      text-shadow: 0 0 4px black;
      z-index: 99;
  }
