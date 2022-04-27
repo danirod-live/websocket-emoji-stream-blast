@@ -31,4 +31,4 @@ server.ready().then(() => {
 });
 
 console.log("Estamos a la escucha");
-server.listen(3000);
+server.listen(3000, "0.0.0.0");
