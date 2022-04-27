@@ -1,0 +1,28 @@
+<button name="duck">🦆</button>
+
+<button name="thumbs-up">👍</button>
+
+<button name="rofl">🤣</button>
+
+<button name="fire">🔥</button>
+
+<style>
+    button { font-size: 4rem; }
+</style>
+
+<script src="/socket.io/socket.io.js" ></script>
+
+<script>
+    const socket = io();
+    socket.connect();
+    socket.emit("hello");
+    socket.emit("client");
+
+    document.body.addEventListener("click", () => {
+       if (event.target.nodeName !== "BUTTON") {
+          return;
+       }
+	const emoji = event.target.name;
+	socket.emit("emoji", emoji);
+    });
+</script>

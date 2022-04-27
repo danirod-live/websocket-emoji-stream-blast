@@ -1,0 +1,58 @@
+<script src="/socket.io/socket.io.js" ></script>
+
+<script>
+ const EMOJIS = {
+     "duck": "🦆",
+     "thumbs-up": "👍",
+     "rofl": "🤣",
+     "fire": "🔥",
+ };
+ 
+ function pintarEmoji(emoji) {
+     const realEmoji = EMOJIS[emoji];
+     if (!realEmoji) {
+	 return;
+     }
+     const node = document.createElement("div");
+     node.innerText = realEmoji;
+     const value = Math.random() * 100;
+     node.style.left = value + "%";
+     node.classList.add("animar");
+     document.body.appendChild(node);
+ }
+ 
+ const socket = io();
+ socket.connect();
+ socket.emit("hello");
+ socket.emit("server");
+ socket.on("emoji", (emoji) => {
+     console.log("Te han mandado un emoji", emoji);
+     pintarEmoji(emoji);
+ });
+
+ document.addEventListener("animationend", (e) => {
+     e.target.remove();
+ });
+</script>
+
+<style>
+ @keyframes chorro {
+     from {
+	 opacity: 1;
+	 transform: translate(0, 0);
+     }
+
+     to {
+	 opacity: 0;
+	 transform: translate(0, -50vh);
+     }
+ }
+ 
+ .animar {
+     position: absolute;
+     bottom: 0;
+     font-size: 4rem;
+     animation: chorro 5s linear;
+     animation-fill-mode: forwards;
+ }
+</style>
